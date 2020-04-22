@@ -94,6 +94,8 @@ class ClairCli(object):
             '-i', '--insecure-registry', action='append',
             dest='insec_regs', metavar='REGISTRY', default=[],
             help='domain of insecure registry')
+        parser.add_argument('-n', '--no-proxy', action='append', 
+            help='the proxy will ignore these domains')
         parser.add_argument('-L', '--log-file', help='save log to file')
         parser.add_argument(
             '-d', '--debug', action='store_true', help='print more logs')
@@ -107,6 +109,7 @@ class ClairCli(object):
         if self.args.local_ip and self.args.insec_regs:
             parser.error('argument --local-ip: not allowed with'
                          ' argument --insecure-registry')
+        os.environ['NO_PROXY'] = ';'.join(args.white_list)
         self.setup_logging()
 
     def setup_logging(self):
